@@ -1,5 +1,7 @@
 # MiniMax-H3 local pipeline notes (RTX 5090)
 
+English | [日本語](README.ja.md)
+
 Personal lab notes for a **ComfyUI + MiniMax-H3 (Ref2VA)** video pipeline on a single **RTX 5090**.
 Timings are wall-clock on one machine; treat them as relative, not absolute benchmarks.
 
