@@ -18,6 +18,17 @@ Timings are wall-clock on one machine; treat them as relative, not absolute benc
 | LX8 | lightx2v's Ref2V turbo 8-step LoRA (`minimax_h3_ref2v_turbo_8step_v1.0_768p`) |
 | VSR | NVIDIA RTX Video Super Resolution (nvidia-vfx SDK) |
 
+## Environment (all numbers below were measured here)
+
+| Item | Value |
+|---|---|
+| GPU | NVIDIA RTX 5090, 32 GB VRAM (Blackwell) |
+| Host | Windows 11, 128 GB RAM |
+| ComfyUI | 0.34.x (master, early Sept 2026) |
+| PyTorch | 2.11 + CUDA 13.0 |
+| Attention | comfy-kitchen 0.2.33 (`--use-ck-attention`) |
+| H3 weights | ref2va pruned int8 convrot UNET, Qwen3-VL-32B int8 convrot text encoder |
+
 ## Stack
 
 - ComfyUI + MiniMax-H3 Ref2VA (pruned int8 convrot UNET works)
@@ -25,7 +36,7 @@ Timings are wall-clock on one machine; treat them as relative, not absolute benc
 - alibaba-pai's official **PDD Acc 8-step LoRA** ([model card](https://huggingface.co/alibaba-pai/MiniMax-H3-Acc-LoRAs)), loaded through the community node pack [ComfyUI-MiniMax-H3-PDD-Acc](https://github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc), for **480p generation only**
 - Stage persistence: nested-latent + conditioning save/load (see **Persistence between stages** below — method + links only; **no node code in this repo**)
 - Latent upscale (nested H3 latent) → cached-conditioning refine → RTX Video Super Resolution (VSR)
-- Orchestration: small Python submitters against Comfy `http://127.0.0.1:8188`
+- Orchestration: small Python submitters that POST API-format graphs to ComfyUI's local HTTP API (`/prompt`) and poll `/history` for completion and timings
 
 ## Current preferred mainline (quality / time)
 
