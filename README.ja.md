@@ -29,12 +29,14 @@
 | ComfyUI | 0.34.x（master、2026 年 9 月上旬時点） |
 | PyTorch | 2.11 + CUDA 13.0 |
 | アテンション | comfy-kitchen 0.2.33（`--use-ck-attention`） |
+| Comfy Compiler | **無効**（`--disable-comfy-compiler`、2026-09-07 から） |
 | H3 の重み | ref2va pruned int8 convrot UNET、Qwen3-VL-32B int8 convrot テキストエンコーダ |
 
 ## 構成
 
 - ComfyUI + MiniMax-H3 Ref2VA（pruned int8 convrot の UNET で問題なく動きます）
 - アテンションは **comfy-kitchen**（`--use-ck-attention`）。密な kitchen 経路を本線として固定しています
+- 2026-09-05 にコアへ入った Comfy Compiler は `--disable-comfy-compiler` で**無効**にしています。有効のままだと、H3 では数本連続で回したあとに約 3 倍遅くなり（UNET が部分オフロードに落ちる）、中断直後に `aimdo memory compile error` で ComfyUI が落ちました。無効にしても速度差はありませんでした（480p・362 フレーム・同 seed で、有効 164 秒 / 無効 163 秒）
 - alibaba-pai の公式 **PDD Acc 8-step LoRA**（[モデルカード](https://huggingface.co/alibaba-pai/MiniMax-H3-Acc-LoRAs)）を、コミュニティ製ノード [ComfyUI-MiniMax-H3-PDD-Acc](https://github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc) 経由で読み込み、**480p の生成にだけ**使っています
 - 工程間の持続化として、nested latent と conditioning の保存・読み込みを行います（後述の「工程間の持続化」を参照してください。方法とリンクだけを書いており、**このリポジトリにノードのコードは含めていません**）
 - latent 拡大（nested H3 latent）→ キャッシュした conditioning で refine → RTX Video Super Resolution（VSR）の順に流します

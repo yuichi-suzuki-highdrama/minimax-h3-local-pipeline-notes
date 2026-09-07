@@ -29,12 +29,14 @@ Timings are wall-clock on one machine; treat them as relative, not absolute benc
 | ComfyUI | 0.34.x (master, early Sept 2026) |
 | PyTorch | 2.11 + CUDA 13.0 |
 | Attention | comfy-kitchen 0.2.33 (`--use-ck-attention`) |
+| Comfy Compiler | **disabled** (`--disable-comfy-compiler`, since 2026-09-07) |
 | H3 weights | ref2va pruned int8 convrot UNET, Qwen3-VL-32B int8 convrot text encoder |
 
 ## Stack
 
 - ComfyUI + MiniMax-H3 Ref2VA (pruned int8 convrot UNET works)
 - Attention: **comfy-kitchen** (`--use-ck-attention`) — dense kitchen path is the locked mainline
+- Comfy Compiler (added to core on 2026-09-05) is **disabled** with `--disable-comfy-compiler`. With it enabled, H3 runs degraded to ~3x slower after a few consecutive jobs (the UNET fell back to partial offload) and ComfyUI crashed with `aimdo memory compile error` right after an interrupt. Disabling it cost nothing measurable (480p, 362 frames, same seed: 164 s on vs 163 s off).
 - alibaba-pai's official **PDD Acc 8-step LoRA** ([model card](https://huggingface.co/alibaba-pai/MiniMax-H3-Acc-LoRAs)), loaded through the community node pack [ComfyUI-MiniMax-H3-PDD-Acc](https://github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc), for **480p generation only**
 - Stage persistence: nested-latent + conditioning save/load (see **Persistence between stages** below — method + links only; **no node code in this repo**)
 - Latent upscale (nested H3 latent) → cached-conditioning refine → RTX Video Super Resolution (VSR)
